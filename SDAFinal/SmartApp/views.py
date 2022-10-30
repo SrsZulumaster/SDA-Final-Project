@@ -4,4 +4,4 @@ from django.http import HttpResponse
 
 
 def index (request):
-    return HttpResponse("hi")
+    return render(request, template_name="text_input.html")
