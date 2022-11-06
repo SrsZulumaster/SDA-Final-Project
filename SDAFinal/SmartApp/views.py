@@ -10,11 +10,13 @@ def index(request):
     if request.method == "POST":
         form = InputForm(request.POST)
         if form.is_valid():
-            return HttpResponseRedirect("output/")
+            text_input = form.text_input
+            if form.switch1== "on":
+                return output(request)
     else:
         form = InputForm()
     return render(request, "text_input.html", {"form": form})
 
 
-def output(request, get_input_on_post):
+def output(request,text):
     return render(request, template_name="text-output.html")

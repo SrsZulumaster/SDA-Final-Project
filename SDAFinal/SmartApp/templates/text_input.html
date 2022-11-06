@@ -3,34 +3,8 @@
 {%block content%}
 
 <form method="post">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
-    <div class="form-group">
-      <label for="{{form.text_input}}" class="form-label mt-4">Example textarea</label>
-      <textarea class="form-control" id="{{form.text_input}}" rows="3"></textarea>
-    </div>
-      <div>
-        <label>{{form.switch1}}</label>
-      </div>
-    <div>
-        <label>{{form.switch2}}</label>
-      </div>
-    <div>
-        <label>{{form.switch3}}</label>
-      </div>
-
-<div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox">
-        <label class="form-check-label" id={{form.switch4}}> some text </label>
-      </div>
-<div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="Switch5">
-        <label class="form-check-label" for="Switch5">{{form.switch5}}</label>
-      </div>
-<div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox">
-        <label class="form-check-label" >{{form.switch6}}</label>
-      </div>
+    {%csrf_token%}
+    {{form.as_p}}
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 {%endblock%}
