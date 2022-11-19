@@ -29,33 +29,48 @@ def output(request):
     charAmount = request.GET.get('countChars')
     summary = request.GET.get('summary')
     removeStop = request.GET.get('removeStop')
+    context = stringLogic(punctuations, upper, lower, removespace, removeline,
+                           charAmount, summary, removeStop, content)
+
+    return render(request, "text-output.html", {"form": context[0],
+                                                "head": context[1]})
+
+
+def stringLogic(punctuations, upper, lower, removespace, removeline, charAmount, summary, removeStop, content):
+    heading = "You did not select anything"
+    if summary == "on":
+        content = makeSummary(content)
+        heading= "Your word summary is:"
+
     if punctuations == "on":
-        return render(request, "text-output.html", {"form": punctuationsRemove(content),
-                                                    "head": "Text Without Punctuations"})
-    elif upper == "on":
-        return render(request, "text-output.html", {"form": makeUpper(content),
-                                                    "head": "Text In Capitals"})
-    elif lower == "on":
-        return render(request, "text-output.html", {"form": makeLower(content),
-                                                    "head": "Text in Lowercase"})
-    elif removespace == "on":
-        return render(request, "text-output.html", {"form": removeExtraSpace(content),
-                                                    "head": "Text with no extra spaces"})
-    elif removeline == "on":
-        return render(request, "text-output.html", {"form": removeNewLine(content),
-                                                    "head": "Text without new line"})
-    elif charAmount == "on":
-        return render(request, "text-output.html", {"form": countCharAmount(content),
-                                                    "head": "Your Text Length was:"})
-    elif summary == "on":
-        return render(request, "text-output.html", {"form": makeSummary(content),
-                                                    "head": "Your Word Summary is:"})
-    elif removeStop == "on":
-        return render(request, "text-output.html", {"form": removeWordSTOP(content),
-                                                    "head": "Your text without the word Stop"})
-    else:
-        return render(request, "text-output.html", {"form": content,
-                                                    "head": "Your original text:"})
+        content = punctuationsRemove(content)
+        heading = "Your text without extra punctuations:"
+
+    if upper == "on":
+        content = makeUpper(content)
+        heading = "Your text in uppercase:"
+
+    if lower == "on":
+        content = makeLower(content)
+        heading = "Your text in lowercase:"
+
+    if removespace == "on":
+        content = removeExtraSpace(content)
+        heading = "Your text without extra spaces"
+
+    if removeline == "on":
+        content = removeNewLine(content)
+        heading = "Your text without extra lines"
+
+    if charAmount == "on":
+        content = countCharAmount(content)
+        heading = "This is how many characters you text has:"
+
+    if removeStop == "on":
+        content = removeWordSTOP(content)
+        heading= "Your text without Stop keyword is:"
+
+    return content, heading
 
 
 def punctuationsRemove(text_input: str):

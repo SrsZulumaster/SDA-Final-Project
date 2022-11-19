@@ -3,7 +3,43 @@
 {%block content%}
 
 <form method="get">
-    {{form.as_p}}
+    {{form.text_input}}
+    <div class="form-check form-switch">
+        {{form.punctuations}}
+        <label class="form-check-label">Remove Punctuation</label>
+        </div>
+    <div class="form-check form-switch">
+    {{form.upper}}
+        <label class="form-check-label">Capitalize text</label>
+    </div>
+    <div class="form-check form-switch">
+        {{form.lower}}
+        <label class="form-check-label">Lowercase text</label>
+        </div>
+    <div class="form-check form-switch">
+        {{form.removeLine}}
+        <label class="form-check-label">Remove Extra Lines</label>
+        </div>
+    <div class="form-check form-switch">
+        {{form.removeSpace}}
+        <label class="form-check-label">Remove Extra spaces</label>
+        </div>
+    <div class="form-check form-switch">
+        {{form.countChars}}
+        <label class="form-check-label">Count Characters</label>
+        </div>
+    <div class="form-check form-switch">
+        {{form.spellCheck}}
+        <label class="form-check-label">Check Spelling</label>
+        </div>
+    <div class="form-check form-switch">
+        {{form.summary}}
+        <label class="form-check-label">Make a summary</label>
+        </div>
+    <div class="form-check form-switch">
+        {{form.removeStop}}
+        <label class="form-check-label">Remove STOP Keyword</label>
+        </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 {%endblock%}

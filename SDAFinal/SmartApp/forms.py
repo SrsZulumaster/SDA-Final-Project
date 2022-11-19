@@ -8,15 +8,15 @@ class InputForm(forms.Form):
         attrs={"class": "form-control",
                "rows": "6"
                 }))
-    punctuations = forms.BooleanField(required=False, widget=)
-    upper = forms.BooleanField(required=False)
-    lower = forms.BooleanField(required=False)
-    removeLine = forms.BooleanField(required=False)
-    removeSpace = forms.BooleanField(required=False)
-    countChars = forms.BooleanField(required=False)
-    spellCheck = forms.BooleanField(required=False)
-    summary = forms.BooleanField(required=False)
-    removeStop = forms.BooleanField(required=False)
+    punctuations = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={"class":"form-check-input"}))
+    upper = forms.BooleanField(required=False , widget=forms.CheckboxInput(attrs={"class":"form-check-input"}))
+    lower = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={"class":"form-check-input"}))
+    removeLine = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={"class":"form-check-input"}))
+    removeSpace = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={"class":"form-check-input"}))
+    countChars = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={"class":"form-check-input"}))
+    spellCheck = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={"class":"form-check-input"}))
+    summary = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={"class":"form-check-input"}))
+    removeStop = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={"class":"form-check-input"}))
 
     def __str__(self):
         return self.text_input
