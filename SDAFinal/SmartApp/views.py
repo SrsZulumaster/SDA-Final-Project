@@ -30,7 +30,7 @@ def output(request):
     summary = request.GET.get('summary')
     removeStop = request.GET.get('removeStop')
     context = stringLogic(punctuations, upper, lower, removespace, removeline,
-                           charAmount, summary, removeStop, content)
+                          charAmount, summary, removeStop, content)
 
     return render(request, "text-output.html", {"form": context[0],
                                                 "head": context[1]})
@@ -39,8 +39,9 @@ def output(request):
 def stringLogic(punctuations, upper, lower, removespace, removeline, charAmount, summary, removeStop, content):
     heading = "You did not select anything"
     if summary == "on":
-        content = makeSummary(content)
-        heading= "Your word summary is:"
+        if not wikipedia.WikipediaException:
+            content = makeSummary(content)
+            heading = "Your word summary is:"
 
     if punctuations == "on":
         content = punctuationsRemove(content)
@@ -62,13 +63,17 @@ def stringLogic(punctuations, upper, lower, removespace, removeline, charAmount,
         content = removeNewLine(content)
         heading = "Your text without extra lines"
 
+    if removeline == "on":
+        content = checkSpelling(content)
+        heading = "Check your spelling on these words:"
+
     if charAmount == "on":
         content = countCharAmount(content)
         heading = "This is how many characters you text has:"
 
     if removeStop == "on":
         content = removeWordSTOP(content)
-        heading= "Your text without Stop keyword is:"
+        heading = "Your text without Stop keyword is:"
 
     return content, heading
 
@@ -107,8 +112,13 @@ def countCharAmount(text_input: str):
 
 
 def checkSpelling(text_input: str):
+    text_output = ""
     spell = SpellChecker()
-    text_output = spell.unknown(text_input)
+    text_list = text_input.split()
+    text_check = spell.unknown(text_list)
+    for word in text_check:
+        text_output += " " + word
+
     return text_output
 
 
