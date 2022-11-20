@@ -1,3 +1,5 @@
+import string
+
 import wikipedia
 from django import forms
 from django.shortcuts import render
@@ -39,9 +41,13 @@ def output(request):
 def stringLogic(punctuations, upper, lower, removespace, removeline, charAmount, summary, removeStop, content):
     heading = "You did not select anything"
     if summary == "on":
-        if not wikipedia.WikipediaException:
+        try:
             content = makeSummary(content)
             heading = "Your word summary is:"
+        except wikipedia.exceptions.PageError:
+            content = content
+        except wikipedia.exceptions.DisambiguationError:
+            content = content
 
     if punctuations == "on":
         content = punctuationsRemove(content)
@@ -79,7 +85,7 @@ def stringLogic(punctuations, upper, lower, removespace, removeline, charAmount,
 
 
 def punctuationsRemove(text_input: str):
-    text_output = text_input.replace(".", "")
+    text_output = text_input.translate(str.maketrans("","", string.punctuation))
     return text_output
 
 
@@ -115,9 +121,8 @@ def checkSpelling(text_input: str):
     text_output = ""
     spell = SpellChecker()
     text_list = text_input.split()
-    text_check = spell.unknown(text_list)
-    for word in text_check:
-        text_output += " " + word
+    for word in text_list:
+        text_output += " " + spell.correction(word)
 
     return text_output
 
