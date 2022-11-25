@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-q98=zf&mxcw2%6#am^%53-okdsf7*#j!h%%2(4ohz&$t&$-r+0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['srszulumaster.eu.pythonanywhere.com','127.0.0.1']
 
 
 # Application definition
@@ -119,8 +119,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
-    '/css/',
+    BASE_DIR / "SmartApp/static",
+
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
