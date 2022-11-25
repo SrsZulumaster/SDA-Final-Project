@@ -1,15 +1,14 @@
 import string
 
+import nltk
 import wikipedia
 from django import forms
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-
-# Create your views here.
-from spellchecker import SpellChecker
-
+from textblob import TextBlob
 from SmartApp.forms import InputForm, OutputForm
-
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 
 def index(request):
     if request.method == "GET":
@@ -118,11 +117,8 @@ def countCharAmount(text_input: str):
 
 
 def checkSpelling(text_input: str):
-    text_output = ""
-    spell = SpellChecker()
-    text_list = text_input.split()
-    for word in text_list:
-        text_output += " " + spell.correction(word)
+    text_parse = TextBlob(text_input)
+    text_output = text_parse.correct()
 
     return text_output
 
@@ -133,7 +129,13 @@ def makeSummary(text_input: str):
 
 
 def removeWordSTOP(text_input: str):
-    text_input = text_input.replace("stop", "")
-    text_input = text_input.replace("Stop", "")
-    text_output = text_input.replace("STOP", "")
+    nltk.download("stopwords")
+    stop_words = set(stopwords.words('english'))
+
+    word_tokens = word_tokenize(text_input)
+
+    text_parse = [w for w in word_tokens if not w.lower() in stop_words]
+    text_output = ' '.join(text_parse)
     return text_output
+
+
