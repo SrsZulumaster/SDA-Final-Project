@@ -10,6 +10,7 @@ from SmartApp.forms import InputForm, OutputForm
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
+
 def index(request):
     if request.method == "GET":
         form = InputForm(request.GET)
@@ -25,19 +26,20 @@ def output(request):
     punctuations = request.GET.get('punctuations')
     upper = request.GET.get('upper')
     lower = request.GET.get('lower')
+    removeline = request.GET.get("removeLine")
     removespace = request.GET.get("removeSpace")
-    removeline = request.GET.get("spellCheck")
+    spellcheck = request.GET.get("spellCheck")
     charAmount = request.GET.get('countChars')
     summary = request.GET.get('summary')
     removeStop = request.GET.get('removeStop')
     context = stringLogic(punctuations, upper, lower, removespace, removeline,
-                          charAmount, summary, removeStop, content)
+                          charAmount, summary, removeStop, content,spellcheck)
 
     return render(request, "text-output.html", {"form": context[0],
                                                 "head": context[1]})
 
 
-def stringLogic(punctuations, upper, lower, removespace, removeline, charAmount, summary, removeStop, content):
+def stringLogic(punctuations, upper, lower, removespace, removeline, charAmount, summary, removeStop, content, spellcheck):
     heading = "You did not select anything"
     if summary == "on":
         try:
@@ -45,8 +47,10 @@ def stringLogic(punctuations, upper, lower, removespace, removeline, charAmount,
             heading = "Your word summary is:"
         except wikipedia.exceptions.PageError:
             content = content
+            heading = "Please try something else:"
         except wikipedia.exceptions.DisambiguationError:
             content = content
+            heading = "Please try a less ambiguous word:"
 
     if punctuations == "on":
         content = punctuationsRemove(content)
@@ -68,7 +72,7 @@ def stringLogic(punctuations, upper, lower, removespace, removeline, charAmount,
         content = removeNewLine(content)
         heading = "Your text without extra lines"
 
-    if removeline == "on":
+    if spellcheck == "on":
         content = checkSpelling(content)
         heading = "Check your spelling on these words:"
 
@@ -84,7 +88,7 @@ def stringLogic(punctuations, upper, lower, removespace, removeline, charAmount,
 
 
 def punctuationsRemove(text_input: str):
-    text_output = text_input.translate(str.maketrans("","", string.punctuation))
+    text_output = text_input.translate(str.maketrans("", "", string.punctuation))
     return text_output
 
 
@@ -99,7 +103,10 @@ def makeLower(text_input: str):
 
 
 def removeNewLine(text_input: str):
-    text_output = text_input.strip()
+    text_output =""
+    text_input = text_input.strip()
+    for w in text_input:
+        text_output =(w.rstrip("\n"))
     return text_output
 
 
@@ -131,11 +138,7 @@ def makeSummary(text_input: str):
 def removeWordSTOP(text_input: str):
     nltk.download("stopwords")
     stop_words = set(stopwords.words('english'))
-
     word_tokens = word_tokenize(text_input)
-
     text_parse = [w for w in word_tokens if not w.lower() in stop_words]
     text_output = ' '.join(text_parse)
     return text_output
-
-
